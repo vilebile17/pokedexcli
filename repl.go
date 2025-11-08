@@ -7,7 +7,7 @@ import (
 	"os"
 ) 
 
-// We begin my creating a registery of all of the commands
+// We begin by creating a registery of all of the commands
 type Config struct {
 	nextLocationsURL string
 	prevLocationsURL string
