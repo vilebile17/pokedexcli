@@ -5,17 +5,15 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"github.com/vilebile17/pokedexcli/internal/pokeapi"
 ) 
 
 // We begin by creating a registery of all of the commands
-type Config struct {
-	nextLocationsURL string
-	prevLocationsURL string
-}
+
 type PokedexCommand struct {
 	name string
 	description string
-	callback func(*Config) error
+	callback func(*pokeapi.Config) error
 }
 func makeCommandMap() map[string]PokedexCommand {
 	moop := map[string]PokedexCommand{
@@ -32,19 +30,19 @@ func makeCommandMap() map[string]PokedexCommand {
 		"map": {
 			name: "map",
 			description: "Prints 20 locations in the Pokemon universe",
-			callback: CommandMap,
+			callback: pokeapi.CommandMap,
 		},
 		"mapb": {
 			name: "mapb",
 			description: "Prints the previous page of Pokemon locations",
-			callback: CommandMapb,
+			callback: pokeapi.CommandMapb,
 		},
 	} 
 	return moop
 }
 
 // Takes each word in the standard input and puts them in a slice
-func cleanInput(text string) []string {
+func CleanInput(text string) []string {
 	newText := strings.ToLower(text)
 	return strings.Fields(newText)	
 }
@@ -53,14 +51,14 @@ func cleanInput(text string) []string {
 func StartRepl() {
 	s := bufio.NewScanner(os.Stdin)
 	commandMap := makeCommandMap()
-	mapConfig := Config{nextLocationsURL: "", prevLocationsURL: ""}
+	mapConfig := pokeapi.Config{NextLocationsURL: "", PrevLocationsURL: ""}
 
 	for true {
 		fmt.Print("Pokedex > ")
 
 		if inputExists := s.Scan(); inputExists {
 			input := s.Text()
-			cleanedInput := cleanInput(input)
+			cleanedInput := CleanInput(input)
 
 			if len(cleanedInput) == 0 { // empty line case
 				continue
@@ -80,12 +78,12 @@ func StartRepl() {
 
 // Here begin all of the functions for the each of the commands
 
-func commandExit(_ *Config) error {
+func commandExit(_ *pokeapi.Config) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
-func commandHelp(_ *Config) error {
+func commandHelp(_ *pokeapi.Config) error {
 	fmt.Println("")
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
