@@ -5,7 +5,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
 	"github.com/vilebile17/pokedexcli/internal/pokeapi"
+	"github.com/vilebile17/pokedexcli/internal/pokecache"
 ) 
 
 // We begin by creating a registery of all of the commands
@@ -13,7 +15,7 @@ import (
 type PokedexCommand struct {
 	name string
 	description string
-	callback func(*pokeapi.Config) error
+	callback func(*pokeapi.Config, *pokecache.Cache) error
 }
 func makeCommandMap() map[string]PokedexCommand {
 	moop := map[string]PokedexCommand{
@@ -51,7 +53,9 @@ func CleanInput(text string) []string {
 func StartRepl() {
 	s := bufio.NewScanner(os.Stdin)
 	commandMap := makeCommandMap()
-	mapConfig := pokeapi.Config{NextLocationsURL: "", PrevLocationsURL: ""}
+
+	mapConfig := &(pokeapi.Config{NextLocationsURL: "", PrevLocationsURL: ""})
+	cache := pokecache.NewCache(5 * time.Second)
 
 	for true {
 		fmt.Print("Pokedex > ")
@@ -67,9 +71,12 @@ func StartRepl() {
 			command := cleanedInput[0]
 
 			if _, ok := commandMap[command]; ok {
-				commandMap[command].callback(&mapConfig)
+				err := commandMap[command].callback(mapConfig, cache)
+				if err != nil {
+					fmt.Print(err)
+				}
 			} else {
-				fmt.Println("Unknown command")
+				fmt.Println("Unknown command - try running 'help' if you're stuck")
 			}
 
 		}
@@ -78,12 +85,12 @@ func StartRepl() {
 
 // Here begin all of the functions for the each of the commands
 
-func commandExit(_ *pokeapi.Config) error {
+func commandExit(_ *pokeapi.Config, _ *pokecache.Cache) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
-func commandHelp(_ *pokeapi.Config) error {
+func commandHelp(_ *pokeapi.Config, _ *pokecache.Cache) error {
 	fmt.Println("")
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
