@@ -22,17 +22,28 @@ type Pokemon struct {
 	Url string
 }
 
-func CommandExplore(_ *Config, _ *pokecache.Cache, place string) error {
-	url := "https://pokeapi.co/api/v2/location-area/" + place 
-
+func CommandExplore(_ *Config, c *pokecache.Cache, place string) error {
 	var err error
+	if body, ok := c.Get(place); ok {
+		var location Location 
+		if err := json.Unmarshal(body, &location); err == nil {
+
+			for _, encounter := range location.PokemonEncounters {
+				fmt.Println(encounter.Pokemon.Name)
+			}
+			return nil
+  	}
+		return err
+	}
+
+	url := "https://pokeapi.co/api/v2/location-area/" + place 
 	var res *http.Response
 	res, err = http.Get(url)
 	if err != nil {
 		return err
 	}
 	if res.StatusCode == 404 {
-		return fmt.Errorf("Who's... that... pokemon! (cuz I can't find it)")
+		return fmt.Errorf("Err, I don't know where that is...\n")
 	}
 	defer res.Body.Close()
 	
@@ -50,5 +61,7 @@ func CommandExplore(_ *Config, _ *pokecache.Cache, place string) error {
 		realPokemon := pokemon.Pokemon // that's a confusing line
 		fmt.Println(realPokemon.Name)
 	}
+
+	c.Add(place, body)
 	return nil
 }
