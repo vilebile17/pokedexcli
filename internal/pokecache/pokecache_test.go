@@ -59,3 +59,14 @@ func TestReapLoop(t *testing.T) {
 		return
 	}
 }
+
+func TestNonExistentKeys(t *testing.T) {
+	cache := NewCache(5 * time.Second)
+	cache.Add("JohnCena.com", []byte("And his name is..."))
+
+	_, ok := cache.Get("MikeTyson.com")
+	if ok {
+		t.Errorf("expected that to not be found...")
+		return
+	}
+}

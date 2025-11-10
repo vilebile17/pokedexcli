@@ -15,7 +15,7 @@ import (
 type PokedexCommand struct {
 	name string
 	description string
-	callback func(*pokeapi.Config, *pokecache.Cache) error
+	callback func(*pokeapi.Config, *pokecache.Cache, string) error
 }
 func makeCommandMap() map[string]PokedexCommand {
 	moop := map[string]PokedexCommand{
@@ -38,6 +38,11 @@ func makeCommandMap() map[string]PokedexCommand {
 			name: "mapb",
 			description: "Prints the previous page of Pokemon locations",
 			callback: pokeapi.CommandMapb,
+		},
+		"explore": {
+			name: "explore",
+			description: "Prints all of the pokemon available in a region. USAGE: explore <location>",
+			callback: pokeapi.CommandExplore,
 		},
 	} 
 	return moop
@@ -63,15 +68,17 @@ func StartRepl() {
 		if inputExists := s.Scan(); inputExists {
 			input := s.Text()
 			cleanedInput := CleanInput(input)
+			cleanedInput = append(cleanedInput, "")
 
 			if len(cleanedInput) == 0 { // empty line case
 				continue
 			}
 
 			command := cleanedInput[0]
+			param := cleanedInput[1]
 
 			if _, ok := commandMap[command]; ok {
-				err := commandMap[command].callback(mapConfig, cache)
+				err := commandMap[command].callback(mapConfig, cache, param)
 				if err != nil {
 					fmt.Print(err)
 				}
@@ -85,12 +92,12 @@ func StartRepl() {
 
 // Here begin all of the functions for the each of the commands
 
-func commandExit(_ *pokeapi.Config, _ *pokecache.Cache) error {
+func commandExit(_ *pokeapi.Config, _ *pokecache.Cache, _ string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
-func commandHelp(_ *pokeapi.Config, _ *pokecache.Cache) error {
+func commandHelp(_ *pokeapi.Config, _ *pokecache.Cache, _ string) error {
 	fmt.Println("")
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
