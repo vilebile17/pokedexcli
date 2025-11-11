@@ -97,13 +97,25 @@ func commandExit(_ *pokeapi.Config, _ *pokecache.Cache, _ string) error {
 	os.Exit(0)
 	return nil
 }
-func commandHelp(_ *pokeapi.Config, _ *pokecache.Cache, _ string) error {
+func commandHelp(_ *pokeapi.Config, _ *pokecache.Cache, param string) error {
+	moop := makeCommandMap()	
+
+	// this section is for the help message of a single command
+	if param != "" {
+		if _, ok := moop[param]; ok {
+			fmt.Printf("%v: %v\n", moop[param].name, moop[param].description)
+		} else {
+			fmt.Println("Command not found")
+		}
+		return nil
+	}
+
+	// The remaining part is for the overall help message
 	fmt.Println("")
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println("")
 
-	moop := makeCommandMap()	
 	for command := range moop {
 		fmt.Printf("%v: %v\n", moop[command].name, moop[command].description)
 	}
