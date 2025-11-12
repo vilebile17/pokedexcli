@@ -23,6 +23,21 @@ type Pokemon struct {
 	Height         int
 	Weight         int
 	BaseExperience int `json:"base_experience"`
+	Types          []struct {
+		Slot int
+		Type struct {
+			Name string
+			URL  string
+		}
+	}
+	Stats []struct {
+		BaseStat int `json:"base_stat"`
+		Effort   int
+		Stat     struct {
+			Name string
+			URL  string
+		}
+	}
 }
 
 func CommandExplore(_ *Config, c *pokecache.Cache, _ *Pokedex, param string) error {

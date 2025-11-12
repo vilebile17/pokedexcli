@@ -51,6 +51,11 @@ func makeCommandMap() map[string]PokedexCommand {
 			description: "Catch a pokemon!",
 			callback:    pokeapi.CommandCatch,
 		},
+		"inspect": {
+			name:        "inspect",
+			description: "Take a look at a pokemon's details",
+			callback:    CommandInspect,
+		},
 	}
 	return moop
 }
