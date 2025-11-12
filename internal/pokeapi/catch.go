@@ -49,9 +49,8 @@ func CommandCatch(_ *Config, c *pokecache.Cache, p *Pokedex, param string) error
 }
 
 func catch(pokemon Pokemon, pokedex *Pokedex) error {
-	fmt.Printf("Throwing a Pokeball at %v...\n", pokemon.Name)
 	prob := sigmoid(pokemon.BaseExperience)
-	fmt.Printf("The chance that %v is caught is %.2f percent\n", pokemon.Name, prob*100.0)
+	fmt.Printf("Throwing a Pokeball at %v...(%.0f percent)\n", pokemon.Name, prob*100.0)
 
 	num := rand.Float64()
 	if num < prob {
