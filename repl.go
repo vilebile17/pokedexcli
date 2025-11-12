@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/vilebile17/pokedexcli/internal/pokeapi"
 	"github.com/vilebile17/pokedexcli/internal/pokecache"
 )
@@ -48,13 +49,18 @@ func makeCommandMap() map[string]PokedexCommand {
 		},
 		"catch": {
 			name:        "catch",
-			description: "Catch a pokemon!",
+			description: "Attemps to catch a pokemon. USAGE: catch <pokemon>",
 			callback:    pokeapi.CommandCatch,
 		},
 		"inspect": {
 			name:        "inspect",
-			description: "Take a look at a pokemon's details",
+			description: "Take a look at a pokemon's details. USAGE: inspect <pokemon>",
 			callback:    CommandInspect,
+		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "List all of the pokemon that you have caught",
+			callback:    commandPokedex,
 		},
 	}
 	return moop
@@ -138,5 +144,39 @@ func commandHelp(_ *pokeapi.Config, _ *pokecache.Cache, _ *pokeapi.Pokedex, para
 	}
 	fmt.Println("")
 
+	return nil
+}
+
+func commandPokedex(_ *pokeapi.Config, _ *pokecache.Cache, p *pokeapi.Pokedex, _ string) error {
+	if len(*p) == 0 {
+		fmt.Println("You've not got any pokemon yet...")
+		return nil
+	}
+
+	fmt.Println("Your pokedex:")
+	for _, pokemon := range *p {
+		Type := pokemon.Types[0].Type.Name
+		switch Type {
+		case "fire":
+			color.Red("   %v\n", pokemon.Name)
+		case "grass":
+			color.Green("   %v\n", pokemon.Name)
+		case "water":
+			color.Blue("   %v\n", pokemon.Name)
+		case "fighting":
+			color.RGB(255, 165, 0).Printf("   %v\n", pokemon.Name)
+		case "poison":
+			color.RGB(128, 0, 128).Printf("   %v\n", pokemon.Name)
+		case "electric":
+			color.Yellow("   %v\n", pokemon.Name)
+		case "psychic":
+			color.Magenta("   %v\n", pokemon.Name)
+		case "ice":
+			color.Cyan("   %v\n", pokemon.Name)
+		default:
+			fmt.Printf("   %v\n", pokemon.Name)
+		}
+
+	}
 	return nil
 }
