@@ -1,17 +1,18 @@
-package pokeapi 
+package pokeapi
 
 import (
-	"net/http"
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
+
 	"github.com/vilebile17/pokedexcli/internal/pokecache"
 )
 
 type Location struct {
-	ID int 
-	Name string 
-	GameIndex int `json:"game_index"`
+	ID                int
+	Name              string
+	GameIndex         int                `json:"game_index"`
 	PokemonEncounters []PokemonEncounter `json:"pokemon_encounters"`
 }
 type PokemonEncounter struct {
@@ -19,24 +20,24 @@ type PokemonEncounter struct {
 }
 type Pokemon struct {
 	Name string
-	Url string
+	URL  string
 }
 
 func CommandExplore(_ *Config, c *pokecache.Cache, place string) error {
 	var err error
 	if body, ok := c.Get(place); ok {
-		var location Location 
+		var location Location
 		if err := json.Unmarshal(body, &location); err == nil {
 
 			for _, encounter := range location.PokemonEncounters {
 				fmt.Println(encounter.Pokemon.Name)
 			}
 			return nil
-  	}
+		}
 		return err
 	}
 
-	url := "https://pokeapi.co/api/v2/location-area/" + place 
+	url := "https://pokeapi.co/api/v2/location-area/" + place
 	var res *http.Response
 	res, err = http.Get(url)
 	if err != nil {
@@ -46,7 +47,7 @@ func CommandExplore(_ *Config, c *pokecache.Cache, place string) error {
 		return fmt.Errorf("Err, I don't know where that is...\n")
 	}
 	defer res.Body.Close()
-	
+
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return err
@@ -55,7 +56,7 @@ func CommandExplore(_ *Config, c *pokecache.Cache, place string) error {
 	var location Location
 	if err = json.Unmarshal(body, &location); err != nil {
 		return err
-  }
+	}
 
 	for _, pokemon := range location.PokemonEncounters {
 		realPokemon := pokemon.Pokemon // that's a confusing line

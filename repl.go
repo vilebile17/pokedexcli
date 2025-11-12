@@ -1,57 +1,59 @@
 package main
 
 import (
-	"strings"
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 	"time"
+
 	"github.com/vilebile17/pokedexcli/internal/pokeapi"
 	"github.com/vilebile17/pokedexcli/internal/pokecache"
-) 
+)
 
 // We begin by creating a registery of all of the commands
 
 type PokedexCommand struct {
-	name string
+	name        string
 	description string
-	callback func(*pokeapi.Config, *pokecache.Cache, string) error
+	callback    func(*pokeapi.Config, *pokecache.Cache, string) error
 }
+
 func makeCommandMap() map[string]PokedexCommand {
 	moop := map[string]PokedexCommand{
 		"exit": {
-			name: "exit",
+			name:        "exit",
 			description: "Exit the Pokedex",
-			callback: commandExit,
+			callback:    commandExit,
 		},
 		"help": {
-			name: "help",
+			name:        "help",
 			description: "Displays a help message",
-			callback: commandHelp,
+			callback:    commandHelp,
 		},
 		"map": {
-			name: "map",
+			name:        "map",
 			description: "Prints 20 locations in the Pokemon universe",
-			callback: pokeapi.CommandMap,
+			callback:    pokeapi.CommandMap,
 		},
 		"mapb": {
-			name: "mapb",
+			name:        "mapb",
 			description: "Prints the previous page of Pokemon locations",
-			callback: pokeapi.CommandMapb,
+			callback:    pokeapi.CommandMapb,
 		},
 		"explore": {
-			name: "explore",
+			name:        "explore",
 			description: "Prints all of the pokemon available in a region. USAGE: explore <location>",
-			callback: pokeapi.CommandExplore,
+			callback:    pokeapi.CommandExplore,
 		},
-	} 
+	}
 	return moop
 }
 
 // Takes each word in the standard input and puts them in a slice
 func CleanInput(text string) []string {
 	newText := strings.ToLower(text)
-	return strings.Fields(newText)	
+	return strings.Fields(newText)
 }
 
 // main command
@@ -62,7 +64,7 @@ func StartRepl() {
 	mapConfig := &(pokeapi.Config{NextLocationsURL: "", PrevLocationsURL: ""})
 	cache := pokecache.NewCache(5 * time.Second)
 
-	for true {
+	for {
 		fmt.Print("Pokedex > ")
 
 		if inputExists := s.Scan(); inputExists {
@@ -97,8 +99,9 @@ func commandExit(_ *pokeapi.Config, _ *pokecache.Cache, _ string) error {
 	os.Exit(0)
 	return nil
 }
+
 func commandHelp(_ *pokeapi.Config, _ *pokecache.Cache, param string) error {
-	moop := makeCommandMap()	
+	moop := makeCommandMap()
 
 	// this section is for the help message of a single command
 	if param != "" {
