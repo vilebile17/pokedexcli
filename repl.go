@@ -16,7 +16,7 @@ import (
 type PokedexCommand struct {
 	name        string
 	description string
-	callback    func(*pokeapi.Config, *pokecache.Cache, string) error
+	callback    func(*pokeapi.Config, *pokecache.Cache, *pokeapi.Pokedex, string) error
 }
 
 func makeCommandMap() map[string]PokedexCommand {
@@ -46,6 +46,11 @@ func makeCommandMap() map[string]PokedexCommand {
 			description: "Prints all of the pokemon available in a region. USAGE: explore <location>",
 			callback:    pokeapi.CommandExplore,
 		},
+		"catch": {
+			name:        "catch",
+			description: "Catch a pokemon!",
+			callback:    pokeapi.CommandCatch,
+		},
 	}
 	return moop
 }
@@ -63,6 +68,7 @@ func StartRepl() {
 
 	mapConfig := &(pokeapi.Config{NextLocationsURL: "", PrevLocationsURL: ""})
 	cache := pokecache.NewCache(5 * time.Second)
+	pokedex := &pokeapi.Pokedex{}
 
 	for {
 		fmt.Print("Pokedex > ")
@@ -80,7 +86,7 @@ func StartRepl() {
 			param := cleanedInput[1]
 
 			if _, ok := commandMap[command]; ok {
-				err := commandMap[command].callback(mapConfig, cache, param)
+				err := commandMap[command].callback(mapConfig, cache, pokedex, param)
 				if err != nil {
 					fmt.Print(err)
 				}
@@ -94,13 +100,13 @@ func StartRepl() {
 
 // Here begin all of the functions for the each of the commands
 
-func commandExit(_ *pokeapi.Config, _ *pokecache.Cache, _ string) error {
+func commandExit(_ *pokeapi.Config, _ *pokecache.Cache, _ *pokeapi.Pokedex, _ string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(_ *pokeapi.Config, _ *pokecache.Cache, param string) error {
+func commandHelp(_ *pokeapi.Config, _ *pokecache.Cache, _ *pokeapi.Pokedex, param string) error {
 	moop := makeCommandMap()
 
 	// this section is for the help message of a single command

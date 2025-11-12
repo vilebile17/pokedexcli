@@ -19,13 +19,15 @@ type PokemonEncounter struct {
 	Pokemon Pokemon
 }
 type Pokemon struct {
-	Name string
-	URL  string
+	Name           string
+	Height         int
+	Weight         int
+	BaseExperience int `json:"base_experience"`
 }
 
-func CommandExplore(_ *Config, c *pokecache.Cache, place string) error {
+func CommandExplore(_ *Config, c *pokecache.Cache, _ *Pokedex, param string) error {
 	var err error
-	if body, ok := c.Get(place); ok {
+	if body, ok := c.Get(param); ok {
 		var location Location
 		if err := json.Unmarshal(body, &location); err == nil {
 
@@ -37,7 +39,7 @@ func CommandExplore(_ *Config, c *pokecache.Cache, place string) error {
 		return err
 	}
 
-	url := "https://pokeapi.co/api/v2/location-area/" + place
+	url := "https://pokeapi.co/api/v2/location-area/" + param
 	var res *http.Response
 	res, err = http.Get(url)
 	if err != nil {
@@ -63,6 +65,6 @@ func CommandExplore(_ *Config, c *pokecache.Cache, place string) error {
 		fmt.Println(realPokemon.Name)
 	}
 
-	c.Add(place, body)
+	c.Add(param, body)
 	return nil
 }

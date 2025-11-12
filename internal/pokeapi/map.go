@@ -1,7 +1,8 @@
-package pokeapi 
+package pokeapi
 
 import (
 	"fmt"
+
 	"github.com/vilebile17/pokedexcli/internal/pokecache"
 )
 
@@ -11,13 +12,16 @@ type Config struct {
 }
 
 type LocationAreas struct {
-	Count int
-	Next string
+	Count    int
+	Next     string
 	Previous string
-	Results []struct{Name string; Url string}
+	Results  []struct {
+		Name string
+		Url  string
+	}
 }
 
-func CommandMap(config *Config, cache *pokecache.Cache, _ string) error {
+func CommandMap(config *Config, cache *pokecache.Cache, _ *Pokedex, _ string) error {
 	var locationAreas LocationAreas
 	var err error
 	if config.NextLocationsURL == "" {
@@ -35,7 +39,7 @@ func CommandMap(config *Config, cache *pokecache.Cache, _ string) error {
 	return nil
 }
 
-func CommandMapb(config *Config, cache *pokecache.Cache, _ string) error {
+func CommandMapb(config *Config, cache *pokecache.Cache, _ *Pokedex, _ string) error {
 	if config.PrevLocationsURL == "" {
 		fmt.Println("you're on the first page mate :)")
 		return nil
@@ -44,7 +48,6 @@ func CommandMapb(config *Config, cache *pokecache.Cache, _ string) error {
 	var locationAreas LocationAreas
 	var err error
 	locationAreas, err = MakeRequest(config.PrevLocationsURL, cache)
-
 	if err != nil {
 		return err
 	}
