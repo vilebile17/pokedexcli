@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math"
 	"math/rand"
 	"net/http"
 
@@ -17,7 +18,7 @@ func CommandCatch(_ *Config, c *pokecache.Cache, p *Pokedex, param string) error
 	if body, ok := c.Get(param); ok {
 		var pokemon Pokemon
 		if err := json.Unmarshal(body, &pokemon); err == nil {
-			return CatchOrNot(pokemon, p)
+			return catch(pokemon, p)
 		}
 		return err
 	}
@@ -44,20 +45,27 @@ func CommandCatch(_ *Config, c *pokecache.Cache, p *Pokedex, param string) error
 	}
 
 	c.Add(param, body)
-	return CatchOrNot(pokemon, p)
+	return catch(pokemon, p)
 }
 
-func CatchOrNot(pokemon Pokemon, pokedex *Pokedex) error {
-	fmt.Printf("Throwing a Pokeball at %v\n", pokemon.Name)
+func catch(pokemon Pokemon, pokedex *Pokedex) error {
+	fmt.Printf("Throwing a Pokeball at %v...\n", pokemon.Name)
+	prob := sigmoid(pokemon.BaseExperience)
+	fmt.Printf("The chance that %v is caught is %.2f percent\n", pokemon.Name, prob*100.0)
 
-	num := rand.Intn(500)
-	if num < pokemon.BaseExperience {
-		// consider the base experience to be the pokemon's strength; if it is stronger it is more likely to resist a pokeball
-		fmt.Printf("%v escaped!\n", pokemon.Name)
+	num := rand.Float64()
+	if num < prob {
+		fmt.Printf("%v was caught!\n", pokemon.Name)
+		(*pokedex)[pokemon.Name] = pokemon
 		return nil
 	}
 
-	fmt.Printf("%v was caught!\n", pokemon.Name)
-	(*pokedex)[pokemon.Name] = pokemon
+	fmt.Printf("%v escaped!\n", pokemon.Name)
 	return nil
+}
+
+func sigmoid(x int) float64 {
+	power := 0.01 * (float64(x) - 150.0)
+	quotient := 1.0 + math.Pow(math.E, power)
+	return 1.0 / quotient
 }

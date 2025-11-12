@@ -70,6 +70,9 @@ func StartRepl() {
 	cache := pokecache.NewCache(5 * time.Second)
 	pokedex := &pokeapi.Pokedex{}
 
+	// mean := pokeapi.Analyze()
+	// fmt.Println(mean)
+
 	for {
 		fmt.Print("Pokedex > ")
 
