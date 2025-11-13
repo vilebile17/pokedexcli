@@ -20,17 +20,16 @@ Then run the program with:
 pokedexcli
 ```
 
-Check the troubleshooting step [here](https://github.com/bootdotdev/bootdev)
+Check the troubleshooting steps [here](https://github.com/bootdotdev/bootdev)
 if it says `command not found`
 
 ## Additional features
 
-Alongside all of the features that the course suggested, this CLI has a few extra
+Alongside all of the features that the course suggested, this CLI has a few extra...
 
 1. Colourful text for the `pokedex` command
 2. Use of a [sigmoid function](https://en.wikipedia.org/wiki/Sigmoid_function)
 to find the probability of a Pokemon being caught.
 It's a bit overkill and not very well tuned but I think that it's a bit funny.
-3. A cool extra function that was used to find the mean of all the
-baseXP of all Pokemon. It could also be slightly modified to find out
-anything else too!
+3. The `help` command has an optional parameter which can be used to
+specify a particular command (it is a bit useless though)
