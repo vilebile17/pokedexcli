@@ -34,7 +34,7 @@ It's a bit overkill and not very well tuned but I think that it's a bit funny.
 
 ![graph](./graph.png)
 
-(The % that a Pokemon is caught given an x value of the Pokemon's base XP)
+(The y-value is the chance that a pokemon is caught and the x-value is the pokemon's base XP)
 
 3. The `help` command has an optional parameter which can be used to
 specify a particular command (it is a bit useless though)
