@@ -19,6 +19,7 @@ type PokemonEncounter struct {
 	Pokemon Pokemon
 }
 type Pokemon struct {
+	ID             int
 	Name           string
 	Height         int
 	Weight         int

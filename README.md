@@ -31,5 +31,10 @@ Alongside all of the features that the course suggested, this CLI has a few extr
 2. Use of a [sigmoid function](https://en.wikipedia.org/wiki/Sigmoid_function)
 to find the probability of a Pokemon being caught.
 It's a bit overkill and not very well tuned but I think that it's a bit funny.
+
+<iframe src="https://www.desmos.com/calculator/wxxyhec7bz?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+
+(The % that a Pokemon is caught given an x value of the Pokemon's base XP)
+
 3. The `help` command has an optional parameter which can be used to
 specify a particular command (it is a bit useless though)

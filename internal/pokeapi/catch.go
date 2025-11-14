@@ -45,6 +45,8 @@ func CommandCatch(_ *Config, c *pokecache.Cache, p *Pokedex, param string) error
 	}
 
 	c.Add(param, body)
+
+	terapagos(&pokemon)
 	return catch(pokemon, p)
 }
 
@@ -67,4 +69,28 @@ func sigmoid(x int) float64 {
 	power := 0.01 * (float64(x) - 150.0)
 	quotient := 1.0 + math.Pow(math.E, power)
 	return 1.0 / quotient
+}
+
+func terapagos(p *Pokemon) {
+	if p.Name != "terapagos" {
+		return
+	}
+	p.Types = append(p.Types, p.Types[0])
+
+	p.Types[0] = struct {
+		Slot int
+		Type struct {
+			Name string
+			URL  string
+		}
+	}{
+		Slot: 1,
+		Type: struct {
+			Name string
+			URL  string
+		}{
+			Name: "tera",
+			URL:  "https://www.youtube.com/watch?v=At8v_Yc044Y",
+		},
+	}
 }

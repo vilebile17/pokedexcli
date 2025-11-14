@@ -173,6 +173,27 @@ func commandPokedex(_ *pokeapi.Config, _ *pokecache.Cache, p *pokeapi.Pokedex, _
 			color.Magenta("   %v\n", pokemon.Name)
 		case "ice":
 			color.Cyan("   %v\n", pokemon.Name)
+		case "dark":
+			color.RGB(100, 75, 120).Printf("   %v\n", pokemon.Name)
+		case "fairy":
+			color.RGB(255, 200, 200).Printf("   %v\n", pokemon.Name)
+		case "tera":
+			var r, g, b int
+			r = 255
+			fmt.Print("   ")
+			for _, char := range pokemon.Name {
+				color.RGB(r, g, b).Printf("%c", char)
+
+				temp := int(0.3 * float64(g))
+				b += temp
+				g -= temp
+				temp = int(0.3 * float64(r))
+				g += temp
+				r -= temp
+			}
+			fmt.Print("\n")
+		case "dragon":
+			color.RGB(50, 71, 146).Printf("   %v\n", pokemon.Name)
 		default:
 			fmt.Printf("   %v\n", pokemon.Name)
 		}

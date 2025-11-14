@@ -16,8 +16,9 @@ func CommandInspect(_ *pokeapi.Config, _ *pokecache.Cache, p *pokeapi.Pokedex, p
 	}
 
 	fmt.Print(strings.ToTitle(fmt.Sprintf("===== %v =====\n", details.Name)))
-	fmt.Printf("Height: %v\n", details.Height)
-	fmt.Printf("Weight: %v\n", details.Weight)
+	fmt.Printf("ID: %v\n", details.ID)
+	fmt.Printf("Height: %.1fm\n", float64(details.Height)*0.1)
+	fmt.Printf("Weight: %.1fkg\n", float64(details.Weight)*0.1)
 	fmt.Println("Types:")
 	for _, Type := range details.Types {
 		fmt.Printf("   - %v\n", Type.Type.Name)
