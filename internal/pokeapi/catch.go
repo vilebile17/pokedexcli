@@ -2,6 +2,7 @@ package pokeapi
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -30,7 +31,7 @@ func CommandCatch(_ *Config, c *pokecache.Cache, p *Pokedex, param string) error
 		return err
 	}
 	if res.StatusCode == 404 {
-		return fmt.Errorf("Who's... that... Pokemon! Cause I don't know who it is\n")
+		return fmt.Errorf("Who's... that... Pokemon! Cause I don't know who it is")
 	}
 	defer res.Body.Close()
 
@@ -93,4 +94,14 @@ func terapagos(p *Pokemon) {
 			URL:  "https://www.youtube.com/watch?v=At8v_Yc044Y",
 		},
 	}
+}
+
+func CommandFree(_ *Config, _ *pokecache.Cache, p *Pokedex, param string) error {
+	if _, ok := (*p)[param]; !ok {
+		return errors.New("You don't have that pokemon")
+	}
+
+	delete(*p, param)
+	fmt.Printf("Goodbye %v, it was nice knowing you!\n", param)
+	return nil
 }

@@ -62,7 +62,7 @@ func CommandExplore(_ *Config, c *pokecache.Cache, _ *Pokedex, param string) err
 		return err
 	}
 	if res.StatusCode == 404 {
-		return fmt.Errorf("Err, I don't know where that is...\n")
+		return fmt.Errorf("Err, I don't know where that is...")
 	}
 	defer res.Body.Close()
 
@@ -76,10 +76,12 @@ func CommandExplore(_ *Config, c *pokecache.Cache, _ *Pokedex, param string) err
 		return err
 	}
 
-	for _, pokemon := range location.PokemonEncounters {
-		realPokemon := pokemon.Pokemon // that's a confusing line
-		fmt.Println(realPokemon.Name)
+	fmt.Println()
+	for _, encounter := range location.PokemonEncounters {
+		pokemon := encounter.Pokemon
+		fmt.Println(pokemon.Name)
 	}
+	fmt.Println()
 
 	c.Add(param, body)
 	return nil

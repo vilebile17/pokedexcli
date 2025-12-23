@@ -62,6 +62,11 @@ func makeCommandMap() map[string]PokedexCommand {
 			description: "List all of the pokemon that you have caught",
 			callback:    commandPokedex,
 		},
+		"free": {
+			name:        "free",
+			description: "Removes a Pokemon from your Pokedex",
+			callback:    pokeapi.CommandFree,
+		},
 	}
 	return moop
 }
@@ -102,7 +107,7 @@ func StartRepl() {
 			if _, ok := commandMap[command]; ok {
 				err := commandMap[command].callback(mapConfig, cache, pokedex, param)
 				if err != nil {
-					fmt.Print(err)
+					fmt.Printf("%v\n", err)
 				}
 			} else {
 				fmt.Println("Unknown command - try running 'help' if you're stuck")
@@ -194,6 +199,8 @@ func commandPokedex(_ *pokeapi.Config, _ *pokecache.Cache, p *pokeapi.Pokedex, _
 			fmt.Print("\n")
 		case "dragon":
 			color.RGB(50, 71, 146).Printf("   %v\n", pokemon.Name)
+		case "bug":
+			color.RGB(83, 147, 46).Printf("   %v\n", pokemon.Name)
 		default:
 			fmt.Printf("   %v\n", pokemon.Name)
 		}
