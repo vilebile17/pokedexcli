@@ -38,3 +38,5 @@ It's a bit overkill and not very well tuned but I think that it's a bit funny.
 
 3. The `help` command has an optional parameter which can be used to
 specify a particular command (it is a bit useless though)
+
+4. The `free` command exists to remove a Pokemon from your Pokedex if you really wanted to for some reason
