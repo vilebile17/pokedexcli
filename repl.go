@@ -182,6 +182,8 @@ func commandPokedex(_ *pokeapi.Config, _ *pokecache.Cache, p *pokeapi.Pokedex, _
 			color.RGB(100, 75, 120).Printf("   %v\n", pokemon.Name)
 		case "fairy":
 			color.RGB(255, 200, 200).Printf("   %v\n", pokemon.Name)
+		case "ground":
+			color.RGB(182, 143, 143).Printf("   %v\n", pokemon.Name)
 		case "tera":
 			var r, g, b int
 			r = 255
