@@ -102,14 +102,18 @@ func StartRepl() {
 			}
 
 			command := cleanedInput[0]
-			param := cleanedInput[1]
+
+			param := ""
+			if len(cleanedInput) >= 2 {
+				param = cleanedInput[1]
+			}
 
 			if _, ok := commandMap[command]; ok {
 				err := commandMap[command].callback(mapConfig, cache, pokedex, param)
 				if err != nil {
 					fmt.Printf("%v\n", err)
 				}
-			} else {
+			} else if command != "" {
 				fmt.Println("Unknown command - try running 'help' if you're stuck")
 			}
 

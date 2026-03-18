@@ -15,6 +15,11 @@ import (
 type Pokedex map[string]Pokemon
 
 func CommandCatch(_ *Config, c *pokecache.Cache, p *Pokedex, param string) error {
+	if param == "" {
+		fmt.Println("USAGE: catch <pokemon_name>")
+		return nil
+	}
+
 	var err error
 	if body, ok := c.Get(param); ok {
 		var pokemon Pokemon

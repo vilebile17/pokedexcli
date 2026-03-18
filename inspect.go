@@ -9,6 +9,11 @@ import (
 )
 
 func CommandInspect(_ *pokeapi.Config, _ *pokecache.Cache, p *pokeapi.Pokedex, param string) error {
+	if param == "" {
+		fmt.Println("USAGE: inspect <pokemon>")
+		return nil
+	}
+
 	details, ok := (*p)[param]
 	if !ok {
 		fmt.Println("You don't seem to have caught that pokemon yet...")

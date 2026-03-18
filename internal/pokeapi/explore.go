@@ -42,6 +42,11 @@ type Pokemon struct {
 }
 
 func CommandExplore(_ *Config, c *pokecache.Cache, _ *Pokedex, param string) error {
+	if param == "" {
+		fmt.Println("USAGE: explore <place>")
+		return nil
+	}
+
 	var err error
 	if body, ok := c.Get(param); ok {
 		var location Location
